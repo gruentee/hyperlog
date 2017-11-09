@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<info>
+    <id>hyperlog</id>
+    <name>Hyper Log</name>
+    <description>My first ownCloud app</description>
+    <licence>AGPL</licence>
+    <author>Constantin Kraft</author>
+    <version>0.0.1</version>
+    <namespace>HyperLog</namespace>
+    <category>other</category>
+    <dependencies>
+        <owncloud min-version="9.0"/>
+    </dependencies>
+</info>
