@@ -8,35 +8,40 @@
 
 namespace OCA\HyperLog\Hook;
 
-use OCA\HyperLog\Service\LogService;
-
 /**
  * Class SessionHooks
  *
- * Hier können Hook registriert werden, die mit der Sitzung des aktuellen Users zu tun haben.
+ * Hier können Hooks registriert werden, die mit der Sitzung des aktuellen Users zu tun haben.
  *
  * @package OCA\Application\Hook
  */
 class SessionHooks {
 
     private $session;
+    private $logService;
 
-    public function __construct($session) {
+    public function __construct($session, $logService) {
         $this->session = $session;
-        $this->logService = new LogService();
+        $this->logService = $logService;
     }
 
     public function register() {
-//        $callback = function ($user) {
-//            // TODO: implement logging for session events
-//            $this->logService
-//        };
-        // TODO: register listeners for session events
+
         $callbackSuccessfulLogin = function ($user) {
-            $this->logService->log("User $user erfolgreich eingeloggt.");
+            $this->logService->log(
+                sprintf('User %s erfolgreich eingeloggt.', $user->getUserId),
+                ["user" => $user->getUserId]
+            );
+        };
+        $callbackFailedLogin = function ($user) {
+            $this->logService->log(
+                sprintf('Login von User %s erfolgreich fehlgeschlagen.', $user->getUserId),
+                ["user" => $user]
+            );
         };
 
         $this->session->listen('\OC\User', 'postLogin', $callbackSuccessfulLogin);
+        $this->session->listen('\OC\User', 'failedLogin', $callbackFailedLogin);
 
     }
 }

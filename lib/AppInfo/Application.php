@@ -8,7 +8,9 @@
 
 namespace OCA\HyperLog\AppInfo;
 
+use OCA\HyperLog\Hook\FileHooks;
 use OCA\HyperLog\Hook\SessionHooks;
+use OCA\HyperLog\Service\LogService;
 use OCP\AppFramework\App;
 
 class Application extends App {
@@ -18,14 +20,26 @@ class Application extends App {
 
         $container = $this->getContainer();
         /**
-         * Controllers
+         * Services
          */
+        $container->registerService('LogService', function ($c) {
+            return new LogService();
+        });
+
         $container->registerService('SessionHooks', function ($c) {
             return new SessionHooks(
-                $c->query('ServerContainer')->getUserSession()
+                $c->query('ServerContainer')->getUserSession(),
+                $c->query('LogService')
+            );
+        });
+        $container->registerService('FileHooks', function ($c) {
+            return new FileHooks(
+                $c->query('ServerContainer')->getRootFolder(),
+                $c->query('LogService')
             );
         });
         // Register hooks
         $container->query('SessionHooks')->register();
+        $container->query('FileHooks')->register();
     }
 }
