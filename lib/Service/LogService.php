@@ -25,8 +25,8 @@ class LogService {
         $this->log->pushHandler(new StreamHandler('hyper.log', Logger::INFO));
     }
 
-    public function log($message) {
-        $this->log->info($message);
+    public function log($message, $data = []) {
+        $this->log->info($message, $data);
     }
 
 }
