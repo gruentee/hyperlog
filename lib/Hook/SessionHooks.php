@@ -29,13 +29,13 @@ class SessionHooks {
 
         $callbackSuccessfulLogin = function ($user) {
             $this->logService->log(
-                sprintf('User %s erfolgreich eingeloggt.', $user->getUserId),
-                ["user" => $user->getUserId]
+                sprintf('User %s erfolgreich eingeloggt.', $user->getDisplayName()),
+                ["user" => $user->getDisplayName()]
             );
         };
         $callbackFailedLogin = function ($user) {
             $this->logService->log(
-                sprintf('Login von User %s erfolgreich fehlgeschlagen.', $user->getUserId),
+                sprintf('Login von User %s fehlgeschlagen.', $user->getDisplayName()),
                 ["user" => $user]
             );
         };
