@@ -14,7 +14,10 @@ use OCA\HyperLog\Service\LogService;
 use OCP\AppFramework\App;
 
 class Application extends App {
-
+    /**
+     * Application constructor.
+     * @param array $urlParams
+     */
     public function __construct(array $urlParams = array()) {
         parent::__construct('hyperlog', $urlParams);
 
@@ -26,20 +29,25 @@ class Application extends App {
             return new LogService();
         });
 
-        $container->registerService('SessionHooks', function ($c) {
-            return new SessionHooks(
-                $c->query('ServerContainer')->getUserSession(),
-                $c->query('LogService')
-            );
-        });
         $container->registerService('FileHooks', function ($c) {
             return new FileHooks(
                 $c->query('ServerContainer')->getRootFolder(),
                 $c->query('LogService')
             );
         });
-        // Register hooks
-        $container->query('SessionHooks')->register();
-        $container->query('FileHooks')->register();
+
+        $container->registerService('SessionHooks', function ($c) {
+            return new SessionHooks(
+                $c->query('ServerContainer')->getUserSession(),
+                $c->query('LogService')
+            );
+        });
+
+        $this->registerHooks();
+    }
+
+    private function registerHooks() {
+        $this->getContainer()->query('SessionHooks')->register();
+        $this->getContainer()->query('FileHooks')->register();
     }
 }
