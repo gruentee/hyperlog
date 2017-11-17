@@ -11,12 +11,10 @@
 
 namespace OCA\HyperLog\AppInfo;
 
-use OCP\AppFramework\App;
-
 require_once __DIR__ . '/autoload.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = new App('hyperlog');
+$app = new Application();
 $container = $app->getContainer();
 
 $container->query('OCP\INavigationManager')->add(function () use ($container) {
