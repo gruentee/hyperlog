@@ -1,6 +1,6 @@
-# Hyper Log
+# HyperLog
 
-An app for logging user interactions like sessions and file I/O in OwnCloud.
+An app for logging user interactions like sessions and file operations in OwnCloud.
 
 Inspired by [SuperLog](https://github.com/EELV-fr/Owncloud-Superlog).
 
