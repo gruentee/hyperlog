@@ -6,12 +6,18 @@
     <licence>AGPL</licence>
     <author>Constantin Kraft</author>
     <version>0.0.2</version>
+    <repository>https://github.com/gruentee/hyperlog</repository>
+    <bugs>https://github.com/gruentee/hyperlog/issues</bugs>
     <namespace>HyperLog</namespace>
     <types>
         <filesystem/>
+        <logging/>
     </types>
     <category>other</category>
     <dependencies>
         <owncloud min-version="9.0"/>
     </dependencies>
+    <settings>
+        <admin>OCA\HyperLog\AdminPanel</admin>
+    </settings>
 </info>

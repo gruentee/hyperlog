@@ -44,10 +44,20 @@ class Application extends App {
         });
 
         $this->registerHooks();
+        $this->registerSettings();
     }
 
     private function registerHooks() {
         $this->getContainer()->query('SessionHooks')->register();
         $this->getContainer()->query('FileHooks')->register();
     }
+
+
+    /**
+     * register setting scripts
+     */
+    public function registerSettings() {
+
+    }
+
 }
