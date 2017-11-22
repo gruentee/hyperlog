@@ -1,4 +1,7 @@
-* [ ] Admin settings screen
+# TODO
+
+* [x] Admin settings screen
     * [ ] Custom logging destinations, e.g. MySQL, Redis, third-party services
     * [ ] Make logging hooks customizable
-* [ ] Save configuration in YAML or database table
+* [x] Save configuration in YAML or database table
+* [ ] l10n

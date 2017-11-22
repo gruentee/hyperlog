@@ -5,24 +5,32 @@
  * Date: 20.11.17
  * Time: 18:18
  */
+script('hyperlog', 'hyperlog');
+style('hyperlog', 'hyperlog');
 ?>
 
 <div class="section" id="hyperlog">
-
-    <h2>A test</h2>
-    <p><em>Diam facilisi metus eu dui elit praesent. Ad sodales diam, pede pretium ac, eros fermentum turpis, convallis.
-            Molestie massa mi sapien venenatis dictumst. Quisque ullamcorper arcu ante, fames ac mattis. Nam tincidunt
-            varius hymenaeos curae ve netus at amet nascetur neque. Conubia in. Fermentum quisque consectetuer. Posuere
-            blandit risus nam urna purus aliquam sociosqu sapien luctus proin tristique leo. Ante etiam at auctor velit
-            consequat hac. Adipiscing montes leo, orci vestibulum est parturient hendrerit, diam dis. Urna vestibulum
-            sed curae facilisis interdum et leo elit dui magna. Enim curae ve netus sollicitudin convallis varius cras
-            morbi orci ullamcorper id, tempor curabitur etiam. Hac, aliquam at id tortor cubilia id, ad erat torquent
-            etiam nisl lobortis. Cubilia orci eu. Congue vel, adipiscing.</em>
+    <h2 class="app-name">HyperLog</h2>
+    <p><em>Hier können Einstellungen für das Logging vorgenommen werden.</em>
     </p>
-
-    <div>
+    <div class="app-settings">
         <p>
-            <input type="text" name="logFileName">
+            <label for="logFileName">Dateiname der Log-Datei. Die Log-Datei liegt im data-Verzeichnis.</label>
         </p>
+        <p>
+            <input type="text" id="logFileName" name="logFileName" value="<?php p($_['logFileName']); ?>">
+            <span id="indicator"><i>&nbsp;</i></span>
+        </p>
+    </div>
+    <div class="app-settings">
+        <fieldset>
+            <legend><h3>Ereignisse, die protokolliert werden sollen</h3></legend>
+            <input type="checkbox" id="hookFileWrite"><label for="hookFileWrite">Datei geschrieben</label>
+            <input type="checkbox" id="hookFileCreate"><label for="hookFileCreate">Datei erstellt</label>
+            <input type="checkbox" id="hookFileDelete"><label for="hookFileDelete">Datei gelöscht</label>
+            <input type="checkbox" id="hookFileTouch"><label for="hookFileTouch">Datei angesehen</label>
+            <input type="checkbox" id="hookFileCopy"><label for="hookFileCopy">Datei kopiert</label>
+            <input type="checkbox" id="hookFileMove"><label for="hookFileMove">Datei verschoben</label>
+        </fieldset>
     </div>
 </div>

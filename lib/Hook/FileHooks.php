@@ -37,11 +37,11 @@ class FileHooks {
         $callbackPostTouch = function (Node $node) use ($reference) {
             $reference->postTouch($node);
         };
-        $callbackPostCopy = function (Node $node) use ($reference) {
-            $reference->postCopy($node);
+        $callbackPostCopy = function (Node $source, Node $target) use ($reference) {
+            $reference->postCopy($source, $target);
         };
-        $callbackPostRename = function (Node $node) use ($reference) {
-            $reference->postDelete($node);
+        $callbackPostRename = function (Node $source, Node $target) use ($reference) {
+            $reference->postRename($source, $target);
         };
 
         // register listeners for file system events
@@ -71,7 +71,7 @@ class FileHooks {
      * @param Node $node
      */
     public function postDelete(Node $node) {
-        $this->logService->log('Datei gelöscht', ['path' => $node->getPath()]);
+        $this->logService->log('Datei geloescht', ['path' => $node->getPath()]);
     }
 
     /**
@@ -82,17 +82,24 @@ class FileHooks {
     }
 
     /**
-     * @param Node $node
+     * @param Node $source
      */
-    public function postCopy(Node $node) {
-        $this->logService->log('Datei kopiert', ['path' => $node->getPath()]);
+    public function postCopy(Node $source, Node $target) {
+        $this->logService->log('Datei ' . $source->getName() . ' nach ' . $target->getName() . ' kopiert',
+            [
+                'path_old' => $source->getPath(),
+                'path_new' => $target->getPath()
+            ]);
     }
 
     /**
-     * @param Node $node
+     * @param Node $source
      */
-    public function postRename(Node $node) {
-        $this->logService->log('Datei umbenannt', ['path' => $node->getPath()]);
+    public function postRename(Node $source, Node $target) {
+        $this->logService->log('Datei ' . $source->getName() . ' nach ' . $target->getName() . ' umbenannt',
+            [
+                'path_old' => $source->getPath(),
+                'path_new' => $target->getPath()
+            ]);
     }
-
 }

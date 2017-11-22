@@ -1,0 +1,23 @@
+#indicator {
+    padding: 0 1em;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+#indicator i {
+    display: inline-block;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+input.success {
+    background: lightgreen;
+}
+
+input.error {
+    background: salmon;
+}
+
+#hyperlog .app-settings p {
+    padding: .5em 0;
+}

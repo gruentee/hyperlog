@@ -10,7 +10,6 @@ namespace OCA\HyperLog;
 
 
 use OCP\Settings\ISettings;
-use OCP\Template;
 
 class AdminPanel implements ISettings {
 
@@ -24,9 +23,7 @@ class AdminPanel implements ISettings {
     }
 
     public function getPanel() {
-        $tmpl = new Template('hyperlog', 'settings-admin');
-
-        return $tmpl;
+        return $this->app->getContainer()->query('SettingsController')->displayPanel();
     }
 
     public function getPriority() {

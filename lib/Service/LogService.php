@@ -10,19 +10,28 @@ namespace OCA\HyperLog\Service;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use OCP\Files\IRootFolder;
+use OCP\IConfig;
 
 class LogService {
 
     private $log;
+    /** @var  \OCP\IConfig */
+    private $config;
+    private $rootFolder;
 
-    public function __construct() {
-        // do constructor stuff
-        // clear log (remove entries older than X days)
+    public function __construct(IConfig $config, IRootFolder $root) {
+        $this->config = $config;
+        $this->rootFolder = $root;
+        // TODO: clear log (remove entries older than X days)
 
-        // determine logging destination e.g. DB, File, 3rd-party service
+        // TODO: determine logging destination e.g. DB, File, 3rd-party service
 
         $this->log = new Logger('HyperLog');
-        $this->log->pushHandler(new StreamHandler('hyper.log', Logger::INFO));
+        $logFileName = $this->config->getAppValue('hyperlog', 'logFileName');
+        $logFilePath = join(DIRECTORY_SEPARATOR, array(
+            $this->rootFolder->getPath(), $logFileName));
+        $this->log->pushHandler(new StreamHandler($logFilePath, Logger::INFO));
     }
 
     public function log($message, $data = []) {

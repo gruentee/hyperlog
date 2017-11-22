@@ -17,9 +17,13 @@
  * The controller class has to be registered in the application.php file since
  * it's instantiated in there
  */
-return [
-    'routes' => [
-        ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-        ['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
+
+namespace OCA\HyperLog\AppInfo;
+
+(new Application())->registerRoutes($this, ['routes' => [
+    [
+        'name' => 'Settings#updateLogFileName',
+        'url' => '/ajax/updateLogFileName',
+        'verb' => 'POST'
     ]
-];
+]]);
