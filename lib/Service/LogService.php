@@ -29,9 +29,7 @@ class LogService {
 
         $this->log = new Logger('HyperLog');
         $logFileName = $this->config->getAppValue('hyperlog', 'logFileName');
-        $logFilePath = join(DIRECTORY_SEPARATOR, array(
-            $this->rootFolder->getPath(), $logFileName));
-        $this->log->pushHandler(new StreamHandler($logFilePath, Logger::INFO));
+        $this->log->pushHandler(new StreamHandler($logFileName, Logger::INFO));
     }
 
     public function log($message, $data = []) {

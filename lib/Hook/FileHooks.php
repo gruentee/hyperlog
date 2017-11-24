@@ -17,6 +17,20 @@ class FileHooks {
     /** @var LogService */
     private $logService;
 
+    public const HOOKS = [
+        'postWrite',
+        'postCreate',
+        'postDelete',
+        'postTouch',
+        'postCopy',
+        'postRename'
+    ];
+
+    public const STATES = [
+        'active',
+        'inactive'
+    ];
+
     public function __construct($root, $logService) {
         $this->root = $root;
         $this->logService = $logService;

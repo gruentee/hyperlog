@@ -23,14 +23,18 @@ style('hyperlog', 'hyperlog');
         </p>
     </div>
     <div class="app-settings">
-        <fieldset>
+        <fieldset id="hookSettings">
             <legend><h3>Ereignisse, die protokolliert werden sollen</h3></legend>
-            <input type="checkbox" id="hookFileWrite"><label for="hookFileWrite">Datei geschrieben</label>
-            <input type="checkbox" id="hookFileCreate"><label for="hookFileCreate">Datei erstellt</label>
-            <input type="checkbox" id="hookFileDelete"><label for="hookFileDelete">Datei gelöscht</label>
-            <input type="checkbox" id="hookFileTouch"><label for="hookFileTouch">Datei angesehen</label>
-            <input type="checkbox" id="hookFileCopy"><label for="hookFileCopy">Datei kopiert</label>
-            <input type="checkbox" id="hookFileMove"><label for="hookFileMove">Datei verschoben</label>
+            <input type="checkbox" id="postWrite" class="checkbox"><label for="postWrite">Datei/Ordner
+                geschrieben</label>
+            <input type="checkbox" id="postCreate" class="checkbox"><label for="postCreate">Datei/Ordner
+                erstellt</label>
+            <input type="checkbox" id="postDelete" class="checkbox"><label for="postDelete">Datei/Ordner
+                gelöscht</label>
+            <input type="checkbox" id="postTouch" class="checkbox"><label for="postTouch">Datei/Ordner angesehen</label>
+            <input type="checkbox" id="postCopy" class="checkbox"><label for="postCopy">Datei/Ordner kopiert</label>
+            <input type="checkbox" id="postRename" class="checkbox"><label for="postRename">Datei/Ordner
+                umbenannt</label>
         </fieldset>
     </div>
 </div>

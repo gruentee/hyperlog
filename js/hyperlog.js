@@ -11,26 +11,66 @@
 (function ($, OC) {
 
     $(document).ready(function () {
-
-        $('#logFileName').blur(function () {
-            var url = OC.generateUrl('/apps/hyperlog/ajax/updateLogFileName');
+        // log file name field
+        var $fieldLogFileName = $('#logFileName')
+        var oldVal = $fieldLogFileName.val()
+        $fieldLogFileName.blur(function () {
+            var currentVal = $(this).val()
+            var $indicator = $('#indicator i');
+            if (oldVal === currentVal)
+                return;
+            var url = OC.generateUrl('/apps/hyperlog/ajax/updateLogFileName')
             var data = {
                 logFileName: $(this).val()
-            };
-            $('#indicator i').toggleClass('icon-loading')
-            // TODO: add spinning "loading" indicator icon
+            }
+            $indicator.toggleClass('icon-loading')
             $.post(url, data).success(function (response) {
-                $('#indicator i').toggleClass('icon-loading')
+                $indicator.toggleClass('icon-loading')
                     .addClass('icon-checkmark')
-                $('#logFileName').removeClass('error')
+                $fieldLogFileName.removeClass('error')
             })
                 .fail(function (response) {
-                    $('#logFileName').addClass('error');
-                    $('#indicator i').removeClass('icon-loading')
-                    $('#indicator i').addClass('icon-close')
-                    console.log(response);
+                    $fieldLogFileName.addClass('error')
+                    $indicator.removeClass('icon-loading')
+                    $indicator.addClass('icon-close')
+                    console.log(response)
                 })
         })
-    });
+        // hook check-boxes
+        var $checkboxes = $('#hookSettings .checkbox');
+        // setup
+        var states = [];
+        var url = OC.generateUrl('/apps/hyperlog/ajax/getHookStates')
+        $.get(url).success(function (response) {
+            states = response
+        }).fail(function (response) {
+            console.error(response)
+        })
+        $checkboxes.each(function () {
+            if (states[this.id] == "active") {
+                $(this).attr('checked', true);
+            } else if (states[this.id] == "inactive") {
+                $(this).attr('checked', false)
+            }
 
-})(jQuery, OC);
+        });
+        // click handlers
+        $checkboxes.click(function () {
+            var url = OC.generateUrl('/apps/hyperlog/ajax/setHookStatus');
+            var status = $(this).is(':checked') ? 'active' : 'inactive'
+            ;var hook = this.id;
+            var data = {
+                hook: hook,
+                status: status
+            }
+            $.post(url, data).success(function (response) {
+                $(this).parent().addClass('visual-feedback success');
+            })
+                .error(function (response) {
+                    console.error(response)
+                    $(this).parent().addClass('visual-feedback error')
+                })
+        })
+    })
+
+})(jQuery, OC)

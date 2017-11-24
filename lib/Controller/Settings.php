@@ -8,30 +8,84 @@
 
 namespace OCA\HyperLog\Controller;
 
-
+use OCA\HyperLog\Hook\FileHooks;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\Template;
+use Punic\Exception;
 
 class Settings extends Controller {
-
+    /**
+     * @var IConfig
+     */
+    private $config;
 
     public function __construct($appName, IRequest $request, IConfig $config) {
         parent::__construct($appName, $request);
         $this->config = $config;
     }
 
-
+    /**
+     * @param $logFileName
+     */
     public function updateLogFileName($logFileName) {
-        // TODO: implement log file
         $this->config->setAppValue($this->appName, 'logFileName', $logFileName);
     }
 
-    public function getLogFileName($logFileName) {
-
+    /**
+     * @param $hook
+     * @return bool
+     * @throws \Exception
+     */
+    public function getHookState($hook) {
+        if (false === in_array($hook, FileHooks::HOOKS, true)) {
+            throw new \Exception('$hook parameter must be one of ' . implode(', ', FileHooks::HOOKS));
+        } else {
+//            return true === ($this->config->getAppValue($this->appName, $hook) === 'active');
+            return $this->config->getAppValue($this->appName, $hook) === 'active' ? 'active' : 'inactive';
+        }
     }
 
+    /**
+     * Return JSON-encoded array with hook => state pairs
+     * @return DataResponse
+     */
+    public function getHookStates() {
+        $states = [];
+        foreach (FileHooks::HOOKS as $hook) {
+            $states[$hook] = $this->getHookState($hook);
+        }
+//        $states = array_map(function($hook) {
+//            return [];
+//        }, FileHooks::HOOKS);
+        return new DataResponse($states);
+    }
+
+    /**
+     * @param $hook
+     * @param $status
+     * @return bool
+     */
+    public function setHookStatus($hook, $status) {
+        if (false === in_array($hook, FileHooks::HOOKS, true)) {
+            throw new \InvalidArgumentException('$hook parameter must be one of ' . implode(', ', FileHooks::HOOKS));
+        } else if (false === in_array($status, FileHooks::STATES, true)) {
+            throw new \InvalidArgumentException('$status parameter must be one of ' . implode(', ', FileHooks::STATES));
+        } else {
+            try {
+                $this->config->setAppValue($this->appName, $hook, $status);
+                return true;
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function displayPanel() {
         $tmpl = new Template('hyperlog', 'settings-admin');
         $tmpl->assign('logFileName', $this->config->getAppValue($this->appName, 'logFileName'));

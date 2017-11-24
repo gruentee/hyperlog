@@ -25,5 +25,15 @@ namespace OCA\HyperLog\AppInfo;
         'name' => 'Settings#updateLogFileName',
         'url' => '/ajax/updateLogFileName',
         'verb' => 'POST'
-    ]
+    ],
+    [
+        'name' => 'Settings#getHookStates',
+        'url' => '/ajax/getHookStates',
+        'verb' => 'GET'
+    ],
+    [
+        'name' => 'Settings#setHookStatus',
+        'url' => '/ajax/setHookStatus',
+        'verb' => 'POST'
+    ],
 ]]);
