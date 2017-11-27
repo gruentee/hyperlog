@@ -36,15 +36,14 @@ class Settings extends Controller {
 
     /**
      * @param $hook
-     * @return bool
+     * @return string (active|inactive)
      * @throws \Exception
      */
     public function getHookState($hook) {
         if (false === in_array($hook, FileHooks::HOOKS, true)) {
             throw new \Exception('$hook parameter must be one of ' . implode(', ', FileHooks::HOOKS));
         } else {
-//            return true === ($this->config->getAppValue($this->appName, $hook) === 'active');
-            return $this->config->getAppValue($this->appName, $hook) === 'active' ? 'active' : 'inactive';
+            return $this->config->getAppValue($this->appName, $hook);
         }
     }
 
@@ -57,15 +56,12 @@ class Settings extends Controller {
         foreach (FileHooks::HOOKS as $hook) {
             $states[$hook] = $this->getHookState($hook);
         }
-//        $states = array_map(function($hook) {
-//            return [];
-//        }, FileHooks::HOOKS);
         return new DataResponse($states);
     }
 
     /**
-     * @param $hook
-     * @param $status
+     * @param $hook string one of \OCA\HyperLog\Hook\FileHooks::HOOKS
+     * @param $status string one of \OCA\HyperLog\Hook\FileHooks::STATES
      * @return bool
      */
     public function setHookStatus($hook, $status) {

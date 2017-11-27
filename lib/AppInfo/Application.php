@@ -30,13 +30,17 @@ class Application extends App {
         $container->registerService('LogService', function ($c) {
             return new LogService(
                 $c->query('ServerContainer')->getConfig(),
-                $c->query('ServerContainer')->getRootFolder());
+                $c->query('ServerContainer')->getRootFolder(),
+                $c->getAppName()
+            );
         });
 
         $container->registerService('FileHooks', function ($c) {
             return new FileHooks(
                 $c->query('ServerContainer')->getRootFolder(),
-                $c->query('LogService')
+                $c->query('LogService'),
+                $c->query('ServerContainer')->getConfig(),
+                $c->getAppName()
             );
         });
 

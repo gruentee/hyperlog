@@ -20,15 +20,16 @@ class LogService {
     private $config;
     private $rootFolder;
 
-    public function __construct(IConfig $config, IRootFolder $root) {
+    public function __construct(IConfig $config, IRootFolder $root, $appName) {
         $this->config = $config;
         $this->rootFolder = $root;
+        $this->appName = $appName;
         // TODO: clear log (remove entries older than X days)
 
         // TODO: determine logging destination e.g. DB, File, 3rd-party service
 
         $this->log = new Logger('HyperLog');
-        $logFileName = $this->config->getAppValue('hyperlog', 'logFileName');
+        $logFileName = $this->config->getAppValue($this->appName, 'logFileName');
         $this->log->pushHandler(new StreamHandler($logFileName, Logger::INFO));
     }
 

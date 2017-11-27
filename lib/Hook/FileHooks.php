@@ -16,6 +16,7 @@ class FileHooks {
     private $root;
     /** @var LogService */
     private $logService;
+    private $config;
 
     public const HOOKS = [
         'postWrite',
@@ -31,40 +32,42 @@ class FileHooks {
         'inactive'
     ];
 
-    public function __construct($root, $logService) {
+    public function __construct($root, $logService, $config, $appName) {
         $this->root = $root;
         $this->logService = $logService;
+        $this->config = $config;
+        $this->appName = $appName;
     }
 
     public function register() {
         $reference = $this;
 
-        $callbackPostWrite = function (Node $node) use ($reference) {
+        $postWrite = function (Node $node) use ($reference) {
             $reference->postWrite($node);
         };
-        $callbackPostCreate = function (Node $node) use ($reference) {
+        $postCreate = function (Node $node) use ($reference) {
             $reference->postCreate($node);
         };
-        $callbackPostDelete = function (Node $node) use ($reference) {
+        $postDelete = function (Node $node) use ($reference) {
             $reference->postDelete($node);
         };
-        $callbackPostTouch = function (Node $node) use ($reference) {
+        $postTouch = function (Node $node) use ($reference) {
             $reference->postTouch($node);
         };
-        $callbackPostCopy = function (Node $source, Node $target) use ($reference) {
+        $postCopy = function (Node $source, Node $target) use ($reference) {
             $reference->postCopy($source, $target);
         };
-        $callbackPostRename = function (Node $source, Node $target) use ($reference) {
+        $postRename = function (Node $source, Node $target) use ($reference) {
             $reference->postRename($source, $target);
         };
 
         // register listeners for file system events
-        $this->root->listen('\OC\Files', 'postWrite', $callbackPostWrite);
-        $this->root->listen('\OC\Files', 'postCreate', $callbackPostCreate);
-        $this->root->listen('\OC\Files', 'postDelete', $callbackPostDelete);
-        $this->root->listen('\OC\Files', 'postTouch', $callbackPostTouch);
-        $this->root->listen('\OC\Files', 'postCopy', $callbackPostCopy);
-        $this->root->listen('\OC\Files', 'postRename', $callbackPostRename);
+        foreach (self::HOOKS as $hook) {
+            $active = 'active' === $this->config->getAppValue($this->appName, $hook);
+            if (true === $active) {
+                $this->root->listen('\OC\Files', $hook, ${$hook});
+            }
+        }
     }
 
     /**
