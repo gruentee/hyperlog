@@ -9,7 +9,6 @@
  */
 
 (function ($, OC) {
-
     $(document).ready(function () {
         // log file name field
         var $fieldLogFileName = $('#logFileName')
@@ -39,21 +38,17 @@
         // hook check-boxes
         var $checkboxes = $('#hookSettings .checkbox');
         // setup
-        var states = [];
         var url = OC.generateUrl('/apps/hyperlog/ajax/getHookStates')
         $.get(url).success(function (response) {
             states = response
+            $checkboxes.each(function () {
+                var checked = states[this.id] === 'active';
+                $(this).attr('checked', checked)
+            });
         }).fail(function (response) {
             console.error(response)
         })
-        $checkboxes.each(function () {
-            if (states[this.id] == "active") {
-                $(this).attr('checked', true);
-            } else if (states[this.id] == "inactive") {
-                $(this).attr('checked', false)
-            }
 
-        });
         // click handlers
         $checkboxes.click(function () {
             var url = OC.generateUrl('/apps/hyperlog/ajax/setHookStatus');

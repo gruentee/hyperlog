@@ -15,7 +15,7 @@ style('hyperlog', 'hyperlog');
     </p>
     <div class="app-settings">
         <p>
-            <label for="logFileName">Dateiname der Log-Datei. Die Log-Datei liegt im data-Verzeichnis.</label>
+            <label for="logFileName">Dateiname der Log-Datei.</label>
         </p>
         <p>
             <input type="text" id="logFileName" name="logFileName" value="<?php p($_['logFileName']); ?>">
@@ -25,6 +25,7 @@ style('hyperlog', 'hyperlog');
     <div class="app-settings">
         <fieldset id="hookSettings">
             <legend><h3>Ereignisse, die protokolliert werden sollen</h3></legend>
+            <h4>Datei-Operationen</h4>
             <input type="checkbox" id="postWrite" class="checkbox"><label for="postWrite">Datei/Ordner
                 geschrieben</label>
             <input type="checkbox" id="postCreate" class="checkbox"><label for="postCreate">Datei/Ordner
