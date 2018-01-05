@@ -18,7 +18,7 @@ class FileHooks {
     private $logService;
     private $config;
 
-    public const HOOKS = [
+    const HOOKS = [
         'postWrite',
         'postCreate',
         'postDelete',
@@ -27,7 +27,7 @@ class FileHooks {
         'postRename'
     ];
 
-    public const STATES = [
+    const STATES = [
         'active',
         'inactive'
     ];
