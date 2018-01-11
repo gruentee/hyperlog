@@ -32,8 +32,9 @@ class FileHooks {
         'inactive'
     ];
 
-    public function __construct($root, $logService, $config, $appName) {
+    public function __construct($root, $user, $logService, $config, $appName) {
         $this->root = $root;
+        $this->user = $user;
         $this->logService = $logService;
         $this->config = $config;
         $this->appName = $appName;
@@ -74,35 +75,40 @@ class FileHooks {
      * @param Node $node
      */
     public function postWrite(Node $node) {
-        $this->logService->log('Datei geschrieben', ['path' => $node->getPath()]);
+        $this->logService->log(sprintf('Datei geschrieben durch User %s', $this->user->getUID()),
+            ['path' => $node->getPath()]);
     }
 
     /**
      * @param Node $node
      */
     public function postCreate(Node $node) {
-        $this->logService->log('Datei erstellt', ['path' => $node->getPath()]);
+        $this->logService->log(sprintf('Datei erstellt durch User %s', $this->user->getUID()),
+            ['path' => $node->getPath()]);
     }
 
     /**
      * @param Node $node
      */
     public function postDelete(Node $node) {
-        $this->logService->log('Datei geloescht', ['path' => $node->getPath()]);
+        $this->logService->log(sprintf('Datei geloescht durch User %s', $this->user->getUID()),
+            ['path' => $node->getPath()]);
     }
 
     /**
      * @param Node $node
      */
     public function postTouch(Node $node) {
-        $this->logService->log('Datei angesehen', ['path' => $node->getPath()]);
+        $this->logService->log(sprintf('Datei angesehen durch User %s', $this->user->getUID()),
+            ['path' => $node->getPath()]);
     }
 
     /**
      * @param Node $source
      */
     public function postCopy(Node $source, Node $target) {
-        $this->logService->log('Datei ' . $source->getName() . ' nach ' . $target->getName() . ' kopiert',
+        $this->logService->log(sprintf('Datei  durch User %s von %s nach %s kopiert',
+            $this->user->getUID(), $source->getName(), $target->getName()),
             [
                 'path_old' => $source->getPath(),
                 'path_new' => $target->getPath()
@@ -113,7 +119,8 @@ class FileHooks {
      * @param Node $source
      */
     public function postRename(Node $source, Node $target) {
-        $this->logService->log('Datei ' . $source->getName() . ' nach ' . $target->getName() . ' umbenannt',
+        $this->logService->log(sprintf('Datei durch User %s von %s nach %s umbenannt', $this->user->getUID(),
+            $source->getName(), $target->getName()),
             [
                 'path_old' => $source->getPath(),
                 'path_new' => $target->getPath()

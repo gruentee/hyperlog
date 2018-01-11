@@ -38,6 +38,7 @@ class Application extends App {
         $container->registerService('FileHooks', function ($c) {
             return new FileHooks(
                 $c->query('ServerContainer')->getRootFolder(),
+                $c->query('ServerContainer')->getUserSession()->getUser(),
                 $c->query('LogService'),
                 $c->query('ServerContainer')->getConfig(),
                 $c->getAppName()
