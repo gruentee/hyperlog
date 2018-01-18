@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: constantin
- * Date: 08.11.17
- * Time: 16:08
- */
 
 namespace OCA\HyperLog\AppInfo;
 
 use OCA\HyperLog\Controller\Settings;
+use OCA\HyperLog\Hook\DownloadHooks;
 use OCA\HyperLog\Hook\FileHooks;
 use OCA\HyperLog\Hook\SessionHooks;
 use OCA\HyperLog\Service\LogService;
@@ -27,7 +22,7 @@ class Application extends App {
         /**
          * Services
          */
-        $container->registerService('LogService', function ($c) {
+        $container->registerService('LogService', function (IAppContainer $c) {
             return new LogService(
                 $c->query('ServerContainer')->getConfig(),
                 $c->query('ServerContainer')->getRootFolder(),
@@ -35,7 +30,7 @@ class Application extends App {
             );
         });
 
-        $container->registerService('FileHooks', function ($c) {
+        $container->registerService('FileHooks', function (IAppContainer $c) {
             return new FileHooks(
                 $c->query('ServerContainer')->getRootFolder(),
                 $c->query('ServerContainer')->getUserSession()->getUser(),
@@ -44,6 +39,18 @@ class Application extends App {
                 $c->getAppName()
             );
         });
+
+        $container->registerService('DownloadHooks', function (IAppContainer $c) {
+            /** @var \OC\Server $server */
+            $server = $c->query('ServerContainer');
+
+            return new DownloadHooks(
+                $server->getRequest(),
+                $c->query('ServerContainer')->getUserSession()->getUser(),
+                $c->query('LogService')
+            );
+        });
+        $container->query('DownloadHooks')->logDownload();
 
         $container->registerService('SessionHooks', function ($c) {
             return new SessionHooks(
@@ -64,6 +71,8 @@ class Application extends App {
         });
 
         $this->registerHooks();
+
+
     }
 
     private function registerHooks() {

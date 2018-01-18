@@ -2,7 +2,7 @@
 <info>
     <id>hyperlog</id>
     <name>Hyper Log</name>
-    <description>Log filesystem events to a log file.</description>
+    <description>Log filesystem events and downloads to a log file.</description>
     <licence>AGPL</licence>
     <author>Constantin Kraft</author>
     <version>0.0.3</version>
@@ -10,6 +10,7 @@
     <bugs>https://bitbucket.org/opendrg/hyperlog/issues</bugs>
     <namespace>HyperLog</namespace>
     <types>
+        <authentication/>
         <filesystem/>
         <logging/>
     </types>
