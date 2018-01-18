@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: constantin
- * Date: 08.11.17
- * Time: 16:26
- */
 
 namespace OCA\HyperLog\Hook;
 
 use OCA\HyperLog\Service\LogService;
+use OCP\Files\IRootFolder;
 use OCP\Files\Node;
+use OCP\IConfig;
 
 class FileHooks {
 
@@ -32,7 +28,7 @@ class FileHooks {
         'inactive'
     ];
 
-    public function __construct($root, $user, $logService, $config, $appName) {
+    public function __construct(IRootFolder $root, $user, LogService $logService, IConfig $config, $appName) {
         $this->root = $root;
         $this->user = $user;
         $this->logService = $logService;

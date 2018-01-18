@@ -54,7 +54,11 @@ class Settings extends Controller {
     public function getHookStates() {
         $states = [];
         foreach (FileHooks::HOOKS as $hook) {
-            $states[$hook] = $this->getHookState($hook);
+            try {
+                $states[$hook] = $this->getHookState($hook);
+            } catch (\Exception $e) {
+                $states[$hook] = 'error retrieving hook state';
+            }
         }
         return new DataResponse($states);
     }

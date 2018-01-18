@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: constantin
- * Date: 08.11.17
- * Time: 18:14
- */
 
 namespace OCA\HyperLog\Service;
 
@@ -20,6 +14,12 @@ class LogService {
     private $config;
     private $rootFolder;
 
+    /**
+     * LogService constructor.
+     * @param IConfig $config
+     * @param IRootFolder $root
+     * @param $appName
+     */
     public function __construct(IConfig $config, IRootFolder $root, $appName) {
         $this->config = $config;
         $this->rootFolder = $root;
@@ -33,6 +33,10 @@ class LogService {
         $this->log->pushHandler(new StreamHandler($logFileName, Logger::INFO));
     }
 
+    /**
+     * @param $message
+     * @param array $data
+     */
     public function log($message, $data = []) {
         $this->log->info($message, $data);
     }
