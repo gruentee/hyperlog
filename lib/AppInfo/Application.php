@@ -12,6 +12,7 @@ use OCA\HyperLog\Controller\Settings;
 use OCA\HyperLog\Hook\FileHooks;
 use OCA\HyperLog\Hook\SessionHooks;
 use OCA\HyperLog\Service\LogService;
+use OCA\HyperLog\Storage\Wrapper\LogWrapper;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
@@ -27,7 +28,7 @@ class Application extends App {
         /**
          * Services
          */
-        $container->registerService('LogService', function ($c) {
+        $container->registerService('LogService', function (IAppContainer $c) {
             return new LogService(
                 $c->query('ServerContainer')->getConfig(),
                 $c->query('ServerContainer')->getRootFolder(),
@@ -35,7 +36,7 @@ class Application extends App {
             );
         });
 
-        $container->registerService('FileHooks', function ($c) {
+        $container->registerService('FileHooks', function (IAppContainer $c) {
             return new FileHooks(
                 $c->query('ServerContainer')->getRootFolder(),
                 $c->query('ServerContainer')->getUserSession()->getUser(),
@@ -45,12 +46,16 @@ class Application extends App {
             );
         });
 
-        $container->registerService('SessionHooks', function ($c) {
+        $container->registerService('SessionHooks', function (IAppContainer $c) {
             return new SessionHooks(
                 $c->query('ServerContainer')->getUserSession(),
                 $c->query('LogService')
             );
         });
+
+        /**
+         * Controllers
+         */
 
         $container->registerService('SettingsController', function (IAppContainer $c) {
             /** @var \OC\Server $server */
@@ -64,10 +69,24 @@ class Application extends App {
         });
 
         $this->registerHooks();
+        $this->setupWrapper();
     }
 
     private function registerHooks() {
         $this->getContainer()->query('SessionHooks')->register();
         $this->getContainer()->query('FileHooks')->register();
+    }
+
+    private function setupWrapper() {
+        $c = $this->getContainer();
+        $logService = $c->query('LogService');
+        $user = $c->query('ServerContainer')->getUserSession()->getUser();
+        \OC\Files\Filesystem::addStorageWrapper(
+            'LogWrapper',
+            function ($mountpoint, $storage, $logService, $user) {
+                return new LogWrapper(['storage' => $storage, 'logService' => $logService,
+                    'user' => $user]);
+            },
+            1);
     }
 }
