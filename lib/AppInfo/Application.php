@@ -12,7 +12,7 @@ use OCA\HyperLog\Controller\Settings;
 use OCA\HyperLog\Hook\FileHooks;
 use OCA\HyperLog\Hook\SessionHooks;
 use OCA\HyperLog\Service\LogService;
-use OCA\HyperLog\Storage\Wrapper\LogWrapper;
+use OCA\HyperLog\Storage\LogWrapper;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
@@ -81,9 +81,7 @@ class Application extends App {
         $c = $this->getContainer();
         $logService = $c->query('LogService');
         $user = $c->query('ServerContainer')->getUserSession()->getUser();
-        \OC\Files\Filesystem::addStorageWrapper(
-            'LogWrapper',
-            function ($mountpoint, $storage, $logService, $user) {
+        \OC\Files\Filesystem::addStorageWrapper('LogWrapper', function ($mountpoint, $storage) use  ($logService, $user) {
                 return new LogWrapper(['storage' => $storage, 'logService' => $logService,
                     'user' => $user]);
             },

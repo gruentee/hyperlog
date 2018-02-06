@@ -6,11 +6,9 @@
  * Time: 19:49
  */
 
-namespace OCA\HyperLog\Storage\Wrapper;
-
+namespace OCA\HyperLog\Storage;
 
 use OC\Files\Storage\Wrapper\Wrapper;
-
 /**
  * Class LogWrapper
  * @package OCA\HyperLog\Storage
@@ -22,6 +20,7 @@ class LogWrapper extends Wrapper {
     private $user;
 
     public function __construct($parameters) {
+        parent::__construct($parameters);
         $this->storage = $parameters['storage'];
         $this->logService = $parameters['logService'];
         $this->user = $parameters['user'];
