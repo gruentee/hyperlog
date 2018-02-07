@@ -6,6 +6,7 @@ use OCA\HyperLog\Service\LogService;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\IConfig;
+use OCP\IUser;
 
 class FileHooks {
 
@@ -30,7 +31,7 @@ class FileHooks {
 
     public function __construct(IRootFolder $root, $user, LogService $logService, IConfig $config, $appName) {
         $this->root = $root;
-        $this->user = $user;
+        $this->userName = $user instanceof IUser ? $user->getUID() : 'OwnCloud (System)';
         $this->logService = $logService;
         $this->config = $config;
         $this->appName = $appName;
@@ -71,7 +72,7 @@ class FileHooks {
      * @param Node $node
      */
     public function postWrite(Node $node) {
-        $this->logService->log(sprintf('Datei geschrieben durch User %s', $this->user->getUID()),
+        $this->logService->log(sprintf('Datei geschrieben durch  %s', $this->userName),
             ['path' => $node->getPath()]);
     }
 
@@ -79,7 +80,7 @@ class FileHooks {
      * @param Node $node
      */
     public function postCreate(Node $node) {
-        $this->logService->log(sprintf('Datei erstellt durch User %s', $this->user->getUID()),
+        $this->logService->log(sprintf('Datei erstellt durch  %s', $this->userName),
             ['path' => $node->getPath()]);
     }
 
@@ -87,7 +88,7 @@ class FileHooks {
      * @param Node $node
      */
     public function postDelete(Node $node) {
-        $this->logService->log(sprintf('Datei geloescht durch User %s', $this->user->getUID()),
+        $this->logService->log(sprintf('Datei gelöscht durch  %s', $this->userName),
             ['path' => $node->getPath()]);
     }
 
@@ -95,7 +96,7 @@ class FileHooks {
      * @param Node $node
      */
     public function postTouch(Node $node) {
-        $this->logService->log(sprintf('Datei angesehen durch User %s', $this->user->getUID()),
+        $this->logService->log(sprintf('Datei angesehen durch  %s', $this->userName),
             ['path' => $node->getPath()]);
     }
 
@@ -103,8 +104,8 @@ class FileHooks {
      * @param Node $source
      */
     public function postCopy(Node $source, Node $target) {
-        $this->logService->log(sprintf('Datei  durch User %s von %s nach %s kopiert',
-            $this->user->getUID(), $source->getName(), $target->getName()),
+        $this->logService->log(sprintf('Datei  durch  %s von %s nach %s kopiert',
+            $this->userName, $source->getName(), $target->getName()),
             [
                 'path_old' => $source->getPath(),
                 'path_new' => $target->getPath()
@@ -115,7 +116,7 @@ class FileHooks {
      * @param Node $source
      */
     public function postRename(Node $source, Node $target) {
-        $this->logService->log(sprintf('Datei durch User %s von %s nach %s umbenannt', $this->user->getUID(),
+        $this->logService->log(sprintf('Datei durch  %s von %s nach %s umbenannt', $this->userName,
             $source->getName(), $target->getName()),
             [
                 'path_old' => $source->getPath(),

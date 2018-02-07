@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: constantin
- * Date: 20.11.17
- * Time: 20:13
- */
 
 namespace OCA\HyperLog\Controller;
 
